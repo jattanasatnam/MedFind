@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="firestore_database_id" translatable="false">ai-studio-android-medfind-75329686-22bc-499d-9811-22d61bafb971</string>
+    <string name="recaptcha_site_key" translatable="false">6LewUTIuAAAAAG5d0YP7-RHaIcU1Z7U-I62xgeJh</string>
+</resources>

@@ -1,0 +1,6 @@
+{
+  "name": "MedFind",
+  "description": "Mobile-first medicine availability and nearby pharmacy discovery app with real-time Firebase Firestore inventory syncing, freshness indicators, and role-based pharmacy and admin workflows.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

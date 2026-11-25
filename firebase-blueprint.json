@@ -1,0 +1,205 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated MedFind user profile, location preference, and server-managed role metadata.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID matching document ID." },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "preferredLocality": { "type": "string" },
+        "preferredPincode": { "type": "string" },
+        "preferredLat": { "type": "number" },
+        "preferredLon": { "type": "number" },
+        "locationSharingEnabled": { "type": "boolean" },
+        "role": { "type": "string", "enum": ["CUSTOMER", "PHARMACY", "ADMIN"] },
+        "status": { "type": "string", "enum": ["ACTIVE", "SUSPENDED"] },
+        "recentSearches": { "type": "array" },
+        "savedPharmacyIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "displayName", "locationSharingEnabled", "role", "status", "recentSearches", "savedPharmacyIds", "createdAt", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Trusted administrator grant record keyed by UID.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "email", "createdAt"]
+    },
+    "Medicine": {
+      "title": "Medicine",
+      "description": "Searchable medicine catalogue item submitted by verified admins or approved pharmacies.",
+      "type": "object",
+      "properties": {
+        "genericName": { "type": "string" },
+        "brandName": { "type": "string" },
+        "strength": { "type": "string" },
+        "dosageForm": { "type": "string" },
+        "category": { "type": "string" },
+        "keywords": { "type": "array" },
+        "catalogueStatus": { "type": "string", "enum": ["VERIFIED", "PENDING_REVIEW", "ARCHIVED"] },
+        "submittedBy": { "type": "string" },
+        "submittedPharmacyId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["genericName", "brandName", "strength", "dosageForm", "category", "keywords", "catalogueStatus", "submittedBy", "createdAt", "updatedAt"]
+    },
+    "Pharmacy": {
+      "title": "Pharmacy",
+      "description": "Participating pharmacy profile and discovery location subject to admin verification.",
+      "type": "object",
+      "properties": {
+        "ownerUserId": { "type": "string" },
+        "name": { "type": "string" },
+        "licenseNumber": { "type": "string" },
+        "address": { "type": "string" },
+        "locality": { "type": "string" },
+        "pincode": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "phone": { "type": "string" },
+        "openingHours": { "type": "string" },
+        "verificationStatus": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED", "SUSPENDED"] },
+        "adminNote": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerUserId", "name", "licenseNumber", "address", "locality", "pincode", "latitude", "longitude", "phone", "openingHours", "verificationStatus", "createdAt", "updatedAt"]
+    },
+    "Inventory": {
+      "title": "Inventory",
+      "description": "Latest pharmacy-reported stock state for a verified pharmacy-medicine pair (ID = pharmacyId_medicineId).",
+      "type": "object",
+      "properties": {
+        "pharmacyId": { "type": "string" },
+        "pharmacyName": { "type": "string" },
+        "pharmacyAddress": { "type": "string" },
+        "pharmacyLocality": { "type": "string" },
+        "pharmacyPincode": { "type": "string" },
+        "pharmacyPhone": { "type": "string" },
+        "pharmacyHours": { "type": "string" },
+        "pharmacyLat": { "type": "number" },
+        "pharmacyLon": { "type": "number" },
+        "ownerUserId": { "type": "string" },
+        "pharmacyVerified": { "type": "boolean" },
+        "medicineId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "genericName": { "type": "string" },
+        "brandName": { "type": "string" },
+        "strength": { "type": "string" },
+        "dosageForm": { "type": "string" },
+        "availabilityStatus": { "type": "string", "enum": ["REPORTED_AVAILABLE", "LOW_STOCK", "OUT_OF_STOCK", "PAUSED"] },
+        "quantity": { "type": "integer" },
+        "unit": { "type": "string" },
+        "updatedBy": { "type": "string" },
+        "updatedByName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["pharmacyId", "pharmacyName", "pharmacyAddress", "pharmacyLocality", "pharmacyPincode", "pharmacyPhone", "pharmacyHours", "pharmacyLat", "pharmacyLon", "ownerUserId", "pharmacyVerified", "medicineId", "medicineName", "genericName", "brandName", "strength", "dosageForm", "availabilityStatus", "quantity", "unit", "updatedBy", "updatedByName", "createdAt", "updatedAt"]
+    },
+    "InventoryHistory": {
+      "title": "InventoryHistory",
+      "description": "Immutable audit trail of stock changes by verified pharmacy owners or admins.",
+      "type": "object",
+      "properties": {
+        "inventoryId": { "type": "string" },
+        "pharmacyId": { "type": "string" },
+        "pharmacyName": { "type": "string" },
+        "medicineId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "ownerUserId": { "type": "string" },
+        "oldStatus": { "type": "string" },
+        "newStatus": { "type": "string" },
+        "oldQuantity": { "type": "integer" },
+        "newQuantity": { "type": "integer" },
+        "unit": { "type": "string" },
+        "changedBy": { "type": "string" },
+        "changedByName": { "type": "string" },
+        "changedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["inventoryId", "pharmacyId", "pharmacyName", "medicineId", "medicineName", "ownerUserId", "oldStatus", "newStatus", "oldQuantity", "newQuantity", "unit", "changedBy", "changedByName", "changedAt"]
+    },
+    "FeedbackReport": {
+      "title": "FeedbackReport",
+      "description": "User correction or dispute report linked to a live inventory listing and sent for admin review.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "reporterName": { "type": "string" },
+        "pharmacyId": { "type": "string" },
+        "pharmacyName": { "type": "string" },
+        "inventoryId": { "type": "string" },
+        "medicineId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "pharmacyOwnerUserId": { "type": "string" },
+        "reportType": { "type": "string", "enum": ["OUT_OF_STOCK_ON_VISIT", "WRONG_QUANTITY", "WRONG_PRICE_OR_UNIT", "CLOSED_OR_UNREACHABLE", "DUPLICATE_LISTING"] },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["OPEN", "UNDER_REVIEW", "RESOLVED", "DISMISSED"] },
+        "resolutionNote": { "type": "string" },
+        "reviewedBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "reporterName", "pharmacyId", "pharmacyName", "inventoryId", "medicineId", "medicineName", "pharmacyOwnerUserId", "reportType", "message", "status", "createdAt", "updatedAt"]
+    },
+    "AdminAction": {
+      "title": "AdminAction",
+      "description": "Immutable administrative audit log entry.",
+      "type": "object",
+      "properties": {
+        "adminUserId": { "type": "string" },
+        "adminEmail": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["PHARMACY", "MEDICINE", "REPORT", "INVENTORY", "SEED", "USER"] },
+        "targetId": { "type": "string" },
+        "action": { "type": "string" },
+        "reason": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminUserId", "adminEmail", "targetType", "targetId", "action", "reason", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profiles, location preferences, and saved pharmacies."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Admin role grants."
+    },
+    "/medicines/{medicineId}": {
+      "schema": { "$ref": "#/entities/Medicine" },
+      "description": "Searchable medicine catalogue."
+    },
+    "/pharmacies/{pharmacyId}": {
+      "schema": { "$ref": "#/entities/Pharmacy" },
+      "description": "Pharmacy profiles and verification state."
+    },
+    "/inventory/{inventoryId}": {
+      "schema": { "$ref": "#/entities/Inventory" },
+      "description": "Latest pharmacy-reported medicine inventory records."
+    },
+    "/inventory_history/{historyId}": {
+      "schema": { "$ref": "#/entities/InventoryHistory" },
+      "description": "Immutable audit trail of inventory updates."
+    },
+    "/feedback_reports/{reportId}": {
+      "schema": { "$ref": "#/entities/FeedbackReport" },
+      "description": "User reports about inaccurate stock listings."
+    },
+    "/admin_actions/{actionId}": {
+      "schema": { "$ref": "#/entities/AdminAction" },
+      "description": "Immutable audit trail of administrative moderation actions."
+    }
+  }
+}
